@@ -1,26 +1,38 @@
-<% products.forEach(function (a){ %>
-    <% var x = a.image_groups.filter(function (b) {
-        return b.view_type === "large";
-    }); %>
-    <div class="card">
-        <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="images/<%= x[0].images[0].link %>">
+<div class="container">
+    <div class="row">
+        <%
+        products.forEach(element => {
+            var image = element.image_groups.filter(image => image.view_type === "large");
+        %>
+        <div class="col s6">
+            <div class="card large">
+                <div class="card-image">
+                    <img class="activator responsive-img"
+                         src="images/<%= image[0].images[0].link %>"
+                         style="margin:0;padding:0;object-fit: contain">
+                </div>
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"><%= element.name %></span>
+                    <% if(element.price_max !== element.price && element.price_max){ %>
+                        <strike><%= '$' + element.price_max %></strike>
+                    <% } %>
+                    <p>$<%= element.price %></p>
+                    <p><a href="/get-product/<%= element.id %>">See more</a></p>
+                </div>
+            </div>
         </div>
-        <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4"><%= a.name %></span>
-            <% if(a.price_max !== a.price){ %>
-                <strike><%= a.price_max %></strike>
-                <p>$<%= a.price %></p>
-            <% } %>
-            <p><a href="/get-product/<%= a.id %>"><%= a.name %></a></p>
-        </div>
+        <% }); %>
     </div>
-<% }) %>
-
+</div>
 <style>
-    .card {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 1rem;
+    .card-content {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        margin: auto;
     }
 </style>

@@ -1,10 +1,35 @@
-<div>
-    <% var x = product[0].image_groups.filter(function (b) {
-        return b.view_type === "small";
-    }) %>
-    <img src="images/<%= x[0].images[0].link %>"/>
-    <p><%= product[0].name %></p>
-    <p><%= product[0].price %></p>
-    <p><%= product[0].page_description %></p>
-
+<% product.forEach(element => {
+    var image = element.image_groups.filter(image => image.view_type === "medium"); %>
+<div class="col s12 m7">
+    <div class="card horizontal">
+        <div class="card-image">
+            <img src="/images/<%= image[0].images[0].link %>"/>
+        </div>
+        <div class="card-stacked">
+            <div class="card-content">
+                <h5><%= product[0].name %></h5>
+                <p>Price: $<%= product[0].price %></p>
+                <p>Color: <%= product[0].variants[0].variation_values.color %></p>
+                <p>Size: <%= product[0].variants[0].variation_values.size %></p>
+                <p>Description: <%= product[0].page_description %></p>
+            </div>
+        </div>
+    </div>
 </div>
+<% }); %>
+
+<script>
+    var instance = M.Carousel.init({
+        fullWidth: true
+    });
+
+</script>
+<style>
+    .card-content {
+        font-weight: bolder;
+        width: 700px;
+        height: 200px;
+    }
+</style>
+
+

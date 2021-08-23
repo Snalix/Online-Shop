@@ -1,0 +1,226 @@
+<div class="itemFilter">
+    <div class="filterContent">
+        <button class="accordion">Size</button>
+        <div class="panel">
+            <label>
+                <input type="checkbox" name="size" value="s" id="s" class="size"/>
+                <span>S</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="m" id="m" class="size">
+                <span>M</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="l" id="l" class="size"/>
+                <span>L</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="x" id="x" class="size"/>
+                <span>X</span>
+            </label>
+            <hr style="width:100%;text-align:left;margin-left:0">
+        </div>
+
+        <button class="accordion">Color</button>
+        <div class="panel">
+            <label>
+                <input type="checkbox" name="size" value="s" id="s" class="size"/>
+                <span>Black</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="m" id="m" class="size"/>
+                <span>White</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="l" id="l" class="size"/>
+                <span>Blue</span>
+            </label>
+            <label>
+                <input type="checkbox" name="size" value="x" id="x" class="size"/>
+                <span>Nude</span>
+            </label>
+            <hr style="width:100%;text-align:left;margin-left:0">
+        </div>
+    </div>
+</div>
+<script>
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+        var thumbsize = 14;
+
+        function draw(slider, splitvalue) {
+
+            /* set function vars */
+            var min = slider.querySelector('.min');
+            var max = slider.querySelector('.max');
+            var lower = slider.querySelector('.lower');
+            var upper = slider.querySelector('.upper');
+            var legend = slider.querySelector('.legend');
+            var thumbsize = parseInt(slider.getAttribute('data-thumbsize'));
+            var rangewidth = parseInt(slider.getAttribute('data-rangewidth'));
+            var rangemin = parseInt(slider.getAttribute('data-rangemin'));
+            var rangemax = parseInt(slider.getAttribute('data-rangemax'));
+
+            /* set min and max attributes */
+            min.setAttribute('max', splitvalue);
+            max.setAttribute('min', splitvalue);
+
+            /* set css */
+            min.style.width = parseInt(thumbsize + ((splitvalue - rangemin) / (rangemax - rangemin)) * (rangewidth - (2 * thumbsize))) + 'px';
+            max.style.width = parseInt(thumbsize + ((rangemax - splitvalue) / (rangemax - rangemin)) * (rangewidth - (2 * thumbsize))) + 'px';
+            min.style.left = '0px';
+            max.style.left = parseInt(min.style.width) + 'px';
+            min.style.top = lower.offsetHeight + 'px';
+            max.style.top = lower.offsetHeight + 'px';
+            legend.style.marginTop = min.offsetHeight + 'px';
+            slider.style.height = (lower.offsetHeight + min.offsetHeight + legend.offsetHeight) + 'px';
+
+            /* correct for 1 off at the end */
+            if (max.value > (rangemax - 1)) max.setAttribute('data-value', rangemax);
+
+            /* write value and labels */
+            max.value = max.getAttribute('data-value');
+            min.value = min.getAttribute('data-value');
+            lower.innerHTML = min.getAttribute('data-value');
+            upper.innerHTML = max.getAttribute('data-value');
+
+        }
+
+        function init(slider) {
+            /* set function vars */
+            var min = slider.querySelector('.min');
+            var max = slider.querySelector('.max');
+            var rangemin = parseInt(min.getAttribute('min'));
+            var rangemax = parseInt(max.getAttribute('max'));
+            var avgvalue = (rangemin + rangemax) / 2;
+            var legendnum = slider.getAttribute('data-legendnum');
+
+            /* set data-values */
+            min.setAttribute('data-value', rangemin);
+            max.setAttribute('data-value', rangemax);
+
+            /* set data vars */
+            slider.setAttribute('data-rangemin', rangemin);
+            slider.setAttribute('data-rangemax', rangemax);
+            slider.setAttribute('data-thumbsize', thumbsize);
+            slider.setAttribute('data-rangewidth', slider.offsetWidth);
+
+            /* write labels */
+            var lower = document.createElement('span');
+            var upper = document.createElement('span');
+            lower.classList.add('lower', 'value');
+            upper.classList.add('upper', 'value');
+            lower.appendChild(document.createTextNode(rangemin));
+            upper.appendChild(document.createTextNode(rangemax));
+            slider.insertBefore(lower, min.previousElementSibling);
+            slider.insertBefore(upper, min.previousElementSibling);
+
+            /* write legend */
+            var legend = document.createElement('div');
+            legend.classList.add('legend');
+            var legendvalues = [];
+            for (var i = 0; i < legendnum; i++) {
+                legendvalues[i] = document.createElement('div');
+                var val = Math.round(rangemin + (i / (legendnum - 1)) * (rangemax - rangemin));
+                legendvalues[i].appendChild(document.createTextNode(val));
+                legend.appendChild(legendvalues[i]);
+
+            }
+            slider.appendChild(legend);
+
+            /* draw */
+            draw(slider, avgvalue);
+
+            /* events */
+            min.addEventListener("input", function () {
+                update(min);
+            });
+            max.addEventListener("input", function () {
+                update(max);
+            });
+        }
+
+        function update(el) {
+            /* set function vars */
+            var slider = el.parentElement;
+            var min = slider.querySelector('#min');
+            var max = slider.querySelector('#max');
+            var minvalue = Math.floor(min.value);
+            var maxvalue = Math.floor(max.value);
+
+            /* set inactive values before draw */
+            min.setAttribute('data-value', minvalue);
+            max.setAttribute('data-value', maxvalue);
+
+            var avgvalue = (minvalue + maxvalue) / 2;
+
+            /* draw */
+            draw(slider, avgvalue);
+        }
+
+        var sliders = document.querySelectorAll('.min-max-slider');
+        sliders.forEach(function (slider) {
+            init(slider);
+        });
+
+    }
+</script>
+<style>
+    .itemFilter {
+        position: absolute;
+        left: 0;
+    }
+
+    .filterContent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 20px;
+        width: 18rem;
+        border: none;
+        outline: none;
+        transition: 0.4s;
+        margin: 10px;
+        font-weight: bolder;
+        font-size: larger;
+        text-align: left;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .accordion:hover {
+        background-color: #ccc;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+        padding: 0 18px;
+        background-color: white;
+        display: none;
+        overflow: hidden;
+        width: 18rem;
+    }
+
+    .min-max-slider {
+        width: 18rem;
+    }
+
+</style>
