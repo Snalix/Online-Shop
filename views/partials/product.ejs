@@ -1,0 +1,10 @@
+<div>
+    <% var x = product[0].image_groups.filter(function (b) {
+        return b.view_type === "small";
+    }) %>
+    <img src="images/<%= x[0].images[0].link %>"/>
+    <p><%= product[0].name %></p>
+    <p><%= product[0].price %></p>
+    <p><%= product[0].page_description %></p>
+
+</div>

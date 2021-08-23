@@ -1,0 +1,17 @@
+<div>
+<% data.forEach(function (b){ %>
+    <div style="border:2px solid black">
+    <h2><%= b.name %></h2>
+        <b><%= b.price%></b>
+        <%
+        var x = b.image_groups.filter(function (a){
+            return a.view_type === "medium";
+        })
+        x.forEach(function (c){%>
+            <div style="width:50px;height:50px;border:2px solid red;">
+                <%= c.images[0].title %>
+            </div>
+        <%} ) %>
+    </div>
+<% })%>
+</div>
