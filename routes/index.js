@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
 })
 
 router.get('/', function (req, res, next) {
-    res.render('index.ejs', {products: false, product: false});
+    res.render('index.ejs', {products: true, product: true});
 });
 
 router.get('/get-products/:category', function (req, res) {
@@ -37,9 +37,7 @@ router.get('/get-products/:category', function (req, res) {
             }
         }).toArray(function (err, result) {
             if (err) throw err;
-            res.render('index.ejs', {products: result, product: false})
-            console.log(result);
-            //res.send(result);
+            res.render('partials/grid.ejs', {products: result});
         });
     });
 })

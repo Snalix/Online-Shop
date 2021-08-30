@@ -9,16 +9,7 @@
     <%- include('partials/navbar.ejs') %>
     <h2 style="text-align: center">Online store</h2>
     <div class="content">
-        <% if (product){ %>
-            <%- include('partials/product.ejs', product) %>
-        <% } %>
-
-        <% if (products){ %>
-            <%- include('partials/grid.ejs', products) %>
-        <% } %>
-
         <%- include('partials/filter.ejs') %>
-
     </div>
 </main>
 </body>
@@ -37,6 +28,7 @@
         background-color: #84fb95;
         background-image: linear-gradient(315deg, #84fb95 0%, #cef576 74%);
     }
+
     main {
         flex: 1 0 auto;
     }
