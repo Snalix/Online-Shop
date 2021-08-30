@@ -51,8 +51,7 @@ router.get('/get-product/:id', function (req, res) {
             }
         ).toArray(function (err, result) {
             if (err) throw err;
-            res.render('index.ejs', {product: result, products: false})
-            //res.send(result);
+            res.render('partials/product.ejs', {product: result})
         });
     });
 })
