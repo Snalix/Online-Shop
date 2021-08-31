@@ -1,3 +1,5 @@
+<%- include('navbar.ejs') %>
+<%- include('filter.ejs') %>
 <% product.forEach(element => {
     var image = element.image_groups.filter(image => image.view_type === "medium"); %>
 <div class="col s12 m7">
